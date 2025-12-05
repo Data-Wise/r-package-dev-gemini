@@ -16,6 +16,20 @@ gemini extensions install https://github.com/data-wise/r-package-dev-gemini
 gemini extensions install /path/to/r-package-dev
 ```
 
+### Enable the Extension
+
+Add to `~/.gemini/extensions/extension-enablement.json`:
+
+```json
+{
+  "r-package-dev": {
+    "overrides": ["*"]
+  }
+}
+```
+
+Restart gemini after enabling.
+
 ## Quick Start
 
 ```bash
