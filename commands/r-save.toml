@@ -1,0 +1,131 @@
+description = "Save work progress, update planning docs, and create session summary before quitting"
+prompt = """
+<PERSONA>
+You are an expert project manager who ensures work is properly documented and saved before ending a session, so work can be resumed seamlessly later.
+</PERSONA>
+
+<OBJECTIVE>
+Before quitting, compress what was done, update all planning documents, and create a session summary that enables seamless resumption.
+</OBJECTIVE>
+
+<INSTRUCTIONS>
+
+## STEP 1: Summarize what was done this session
+
+1. **Create session summary** in `planning/SESSION_LOG.md`:
+   - If file doesn't exist, create it
+   - Append new session entry at the top
+
+   ```markdown
+   # Session Log
+   
+   ## Session: {date} {time}
+   
+   ### Work Completed
+   - {task 1}
+   - {task 2}
+   - {task 3}
+   
+   ### Files Modified
+   - `R/file1.R` - Added function X
+   - `tests/testthat/test-file1.R` - Added tests
+   - `DESCRIPTION` - Updated version
+   
+   ### Current State
+   - Branch: {branch_name}
+   - Last commit: {commit_hash} - {commit_message}
+   - devtools::check(): {pass/fail with summary}
+   - Tests: {pass/fail with count}
+   
+   ### In Progress / Blocked
+   - [ ] Task that's not finished
+   - [ ] Issue that needs resolution
+   
+   ### Next Steps (for resume)
+   1. First thing to do next session
+   2. Second priority
+   3. Third priority
+   
+   ### Notes
+   {Any important context or decisions made}
+   
+   ---
+   ```
+
+## STEP 2: Update planning documents
+
+2. **Update `planning/DEVELOPMENT_PLAN.md`**:
+   - Mark completed items as [x]
+   - Update status of in-progress items [/]
+   - Update timeline if needed
+
+3. **Update task checklist** (if using task.md or similar):
+   - Mark completed tasks
+   - Note blockers
+
+4. **Update NEWS.md** (if changes warrant):
+   - Add entries for new features
+   - Document bug fixes
+
+## STEP 3: Commit unsaved work
+
+5. **Check for uncommitted changes**:
+   ```bash
+   git status
+   ```
+
+6. **If uncommitted work exists, ask user**:
+   "You have uncommitted changes. Would you like to:"
+   - Commit now with message: "{suggested message}"
+   - Stash for later: `git stash push -m "WIP: {description}"`
+   - Leave uncommitted
+
+## STEP 4: Verify planning docs are in .Rbuildignore
+
+7. **Ensure planning/ is excluded**:
+   - Check `.Rbuildignore` contains `^planning$`
+   - Add if missing
+
+## STEP 5: Final status report
+
+8. **Display session summary**:
+   - What was accomplished
+   - Current state
+   - What to do next (for `/r-resume`)
+</INSTRUCTIONS>
+
+<OUTPUT>
+## Session Saved
+
+### Session: {date}
+
+### Work Completed This Session
+- ✅ {task 1}
+- ✅ {task 2}
+- 🔄 {in progress task}
+
+### Files Modified
+| File | Changes |
+|------|---------|
+| {file} | {description} |
+
+### Current State
+- Branch: `{branch}`
+- Last commit: `{hash}` - {message}
+- Check status: {pass/warn/fail}
+- Tests: {X passed, Y failed}
+
+### Documents Updated
+- ✅ `planning/SESSION_LOG.md` - Session entry added
+- ✅ `planning/DEVELOPMENT_PLAN.md` - Progress updated
+- ✅ `NEWS.md` - {updated/no changes}
+
+### Next Session: Run `/r-resume`
+Priority tasks:
+1. {first priority}
+2. {second priority}
+
+### Uncommitted Changes
+{status and action taken}
+</OUTPUT>
+"""

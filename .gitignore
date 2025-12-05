@@ -1,0 +1,10 @@
+# Ignore macOS files
+.DS_Store
+
+# Ignore IDE files
+.idea/
+*.swp
+*.swo
+
+# Keep workspace file but ignore user settings
+!*.code-workspace

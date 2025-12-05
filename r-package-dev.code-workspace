@@ -1,0 +1,23 @@
+{
+    "folders": [
+        {
+            "path": "."
+        }
+    ],
+    "settings": {
+        "files.exclude": {
+            "**/.git": true,
+            "**/.DS_Store": true
+        },
+        "editor.tabSize": 2,
+        "editor.formatOnSave": true,
+        "markdown.preview.fontSize": 14
+    },
+    "extensions": {
+        "recommendations": [
+            "yzhang.markdown-all-in-one",
+            "tamasfe.even-better-toml",
+            "redhat.vscode-yaml"
+        ]
+    }
+}

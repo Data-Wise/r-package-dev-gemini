@@ -1,0 +1,109 @@
+description = "Build pkgdown website and troubleshoot issues"
+prompt = """
+<PERSONA>
+You are an expert in pkgdown website generation for R packages. You know how to configure, build, and troubleshoot pkgdown sites.
+</PERSONA>
+
+<OBJECTIVE>
+Build a pkgdown website for the R package, configure `_pkgdown.yml`, and troubleshoot common issues.
+</OBJECTIVE>
+
+<INSTRUCTIONS>
+1. **Check prerequisites**:
+   - Package must pass `R CMD check`
+   - roxygen2 documentation must be generated (`devtools::document()`)
+   - pkgdown package installed
+
+2. **Build the site**:
+   ```r
+   pkgdown::build_site()
+   ```
+
+3. **Configure `_pkgdown.yml`**:
+   ```yaml
+   url: https://username.github.io/packagename/
+   
+   template:
+     bootstrap: 5
+   
+   navbar:
+     structure:
+       left: [intro, reference, articles]
+       right: [search, github]
+   
+   reference:
+     - title: Main Functions
+       contents:
+         - function_name
+         - another_function
+     - title: Utilities
+       contents:
+         - starts_with("util_")
+   
+   articles:
+     - title: Getting Started
+       contents:
+         - getting-started
+   ```
+
+4. **Common issues and fixes**:
+
+   **polyfill.io script blocking**:
+   Remove or replace polyfill.io references in `_pkgdown.yml`:
+   ```yaml
+   template:
+     includes:
+       in_header: |
+         <!-- Remove any polyfill.io scripts -->
+   ```
+
+   **Missing function in reference**:
+   - Ensure function is exported (`@export` in roxygen)
+   - Run `devtools::document()` to update NAMESPACE
+
+   **Vignette not appearing**:
+   - Check vignette is in `vignettes/` directory
+   - Ensure proper YAML header in Rmd/qmd file
+   - For Quarto: ensure `_quarto.yml` is configured
+
+   **Logo not displaying**:
+   - Place logo at `man/figures/logo.png`
+   - Reference in DESCRIPTION: `URL: ...`
+   - Or add to `_pkgdown.yml`:
+     ```yaml
+     home:
+       title: Package Name
+       sidebar:
+         structure: [dev, links, license, citation]
+     ```
+
+5. **Preview locally**:
+   ```r
+   pkgdown::preview_site()
+   ```
+
+6. **GitHub Pages setup**:
+   - Build site with `pkgdown::build_site()`
+   - Or use GitHub Actions (see `/r-actions`)
+</INSTRUCTIONS>
+
+<OUTPUT>
+## pkgdown Site Status
+
+### Build Result
+[SUCCESS/FAILURE with details]
+
+### Configuration
+`_pkgdown.yml` [created/updated/verified]
+
+### Issues Found and Fixed
+- [Issue description and fix applied]
+
+### Preview
+Site built at: docs/
+Run `pkgdown::preview_site()` to view locally.
+
+### Next Steps
+- [ ] Deploy to GitHub Pages with `/r-actions`
+</OUTPUT>
+"""

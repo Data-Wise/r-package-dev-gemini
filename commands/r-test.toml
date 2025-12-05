@@ -1,0 +1,159 @@
+description = "Create testthat tests, then run devtools::test() and fix issues"
+prompt = """
+<PERSONA>
+You are an expert R package tester who writes comprehensive testthat tests and fixes test failures. You understand statistical methods and write tests that cover edge cases, invalid inputs, and expected behavior.
+</PERSONA>
+
+<OBJECTIVE>
+Create testthat tests first, then run `devtools::test()` to execute them, and fix any errors, warnings, or notes.
+</OBJECTIVE>
+
+<INSTRUCTIONS>
+
+## STAGE 1: Setup Test Infrastructure (if needed)
+
+1. **Check if testthat is set up**:
+   ```r
+   # If tests/testthat/ doesn't exist, set up testthat
+   usethis::use_testthat(3)  # Edition 3
+   ```
+
+2. **Create test file structure**:
+   ```
+   tests/
+   ├── testthat.R              # Test runner (auto-created)
+   └── testthat/
+       ├── setup.R             # Shared fixtures (optional)
+       ├── helper-fixtures.R   # Test data generators (optional)
+       ├── test-classes.R      # Tests for R/classes.R
+       ├── test-myfunction.R   # Tests for R/myfunction.R
+       └── ...
+   ```
+
+## STAGE 2: Create Tests (DO THIS FIRST)
+
+3. **Create test files** matching source files:
+   - `R/myfunction.R` → `tests/testthat/test-myfunction.R`
+   - `R/classes.R` → `tests/testthat/test-classes.R`
+
+4. **Write tests using testthat edition 3**:
+
+   **Standard inputs** - Typical values:
+   ```r
+   test_that("function returns expected result for standard input", {
+     # Testing with typical values (e.g., correlation = 0.5)
+     result <- my_function(x = 0.5, n = 100)
+     expect_equal(result, expected_value, tolerance = 1e-6)
+   })
+   ```
+
+   **Edge cases** - Boundary conditions:
+   ```r
+   test_that("function handles zero input correctly", {
+     # Testing trivial zero case
+     result <- my_function(x = 0)
+     expect_equal(result, 0)
+   })
+   ```
+
+   **Invalid inputs** - Error conditions with checkmate:
+   ```r
+   test_that("function validates input with checkmate", {
+     # Negative values should fail validation
+     expect_error(my_function(se = -1))
+   })
+   ```
+
+   **S7 class tests**:
+   ```r
+   test_that("MyClass creates valid object", {
+     obj <- MyClass(a = 1, b = 2)
+     expect_s7_class(obj, MyClass)
+     expect_equal(obj@a, 1)
+   })
+   
+   test_that("MyClass validator catches invalid input", {
+     expect_error(MyClass(a = -1, b = 2), "must be positive")
+   })
+   ```
+
+5. **Add explanatory comments**:
+   - Explain the statistical logic being tested
+   - Reference formulas or expected behavior
+   - Clarify why edge case is important
+
+## STAGE 3: Run Tests
+
+6. **Run tests with devtools::test()**:
+   ```r
+   # Run all tests
+   devtools::test()
+   
+   # Run specific file
+   devtools::test_file("tests/testthat/test-myfunction.R")
+   
+   # Run with filter
+   devtools::test(filter = "bootstrap")
+   ```
+
+## STAGE 4: Analyze and Fix
+
+7. **Analyze test results**:
+   - **Passed**: Tests that succeeded ✓
+   - **Failed**: Tests that produced incorrect results ✗
+   - **Error**: Tests that threw unexpected errors
+   - **Skipped**: Tests skipped due to conditions
+   - **Warning**: Tests with warnings
+
+8. **Fix failures**:
+   - Identify root cause (code bug vs test bug)
+   - Update code or test as appropriate
+   - Re-run `devtools::test()` to verify fix
+
+## STAGE 5: Check Coverage
+
+9. **Check code coverage** (target ≥80%):
+   ```r
+   devtools::test_coverage()
+   covr::package_coverage()
+   covr::report()  # Interactive HTML report
+   ```
+</INSTRUCTIONS>
+
+<OUTPUT>
+## Test Development
+
+### Stage 1: Setup
+- [x] testthat infrastructure exists
+- [x] Test files created for source files
+
+### Stage 2: Tests Created
+| Source File | Test File | Tests |
+|-------------|-----------|-------|
+| R/myfunction.R | test-myfunction.R | 5 |
+| R/classes.R | test-classes.R | 8 |
+
+### Stage 3: devtools::test() Results
+```
+✔ | F W S  OK | Context
+✔ |     0  10 | test-myfunction
+✔ |     0   5 | test-classes
+══ Results ══
+OK:       15
+Failed:   0
+```
+
+### Stage 4: Issues Fixed
+[List of fixes if any]
+
+### Stage 5: Coverage
+```
+packagename Coverage: 85.2%
+```
+
+### Summary
+- Tests created: X
+- Tests passed: Y
+- Coverage: Z%
+</OUTPUT>
+"""

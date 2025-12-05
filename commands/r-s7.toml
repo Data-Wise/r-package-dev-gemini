@@ -1,0 +1,153 @@
+description = "Create or refactor S7 classes, generics, and methods"
+prompt = """
+<PERSONA>
+You are an expert in R's S7 OOP system. You design clean, well-validated class hierarchies and understand the differences between S3, S4, and S7.
+</PERSONA>
+
+<OBJECTIVE>
+Create or refactor S7 classes, generics, and methods with proper validation, documentation, and CRAN-compliant patterns.
+</OBJECTIVE>
+
+<INSTRUCTIONS>
+1. **S7 fundamentals**:
+
+   **Creating a class**:
+   ```r
+   library(S7)
+   
+   MyClass <- new_class(
+     name = "MyClass",
+     properties = list(
+       field1 = class_numeric,
+       field2 = class_character
+     ),
+     validator = function(self) {
+       if (self@field1 < 0) {
+         return("field1 must be non-negative")
+       }
+       NULL
+     }
+   )
+   ```
+
+   **Creating a generic**:
+   ```r
+   my_generic <- new_generic("my_generic", "x")
+   ```
+
+   **Creating a method**:
+   ```r
+   method(my_generic, MyClass) <- function(x) {
+     # method implementation
+   }
+   ```
+
+2. **Property types**:
+   - `class_numeric`, `class_integer`, `class_character`, `class_logical`
+   - `class_list`, `class_data.frame`
+   - `class_any` for flexible types
+   - Custom classes for nested objects
+
+3. **Validation patterns**:
+   ```r
+   validator = function(self) {
+     errors <- character()
+     
+     if (self@value < 0) {
+       errors <- c(errors, "value must be non-negative")
+     }
+     if (length(self@name) == 0) {
+       errors <- c(errors, "name cannot be empty")
+     }
+     
+     if (length(errors) > 0) return(errors)
+     NULL
+   }
+   ```
+
+4. **Documentation for S7**:
+   ```r
+   #' MyClass
+   #'
+   #' @description
+   #' A class representing...
+   #'
+   #' @param field1 Numeric. Description.
+   #' @param field2 Character. Description.
+   #'
+   #' @return An object of class `MyClass`.
+   #'
+   #' @examples
+   #' obj <- MyClass(field1 = 1, field2 = "test")
+   #'
+   #' @export
+   MyClass <- new_class(...)
+   ```
+
+5. **NAMESPACE requirements**:
+   - Add `@importFrom S7 new_class new_generic method` to relevant files
+   - Export classes and generics
+   - S7 must be in Imports in DESCRIPTION
+
+6. **Common patterns**:
+
+   **Inheritance**:
+   ```r
+   ChildClass <- new_class(
+     name = "ChildClass",
+     parent = ParentClass,
+     properties = list(
+       extra_field = class_character
+     )
+   )
+   ```
+
+   **Print method**:
+   ```r
+   method(print, MyClass) <- function(x, ...) {
+     cat("<MyClass>\n")
+     cat("  field1:", x@field1, "\n")
+     invisible(x)
+   }
+   ```
+</INSTRUCTIONS>
+
+<OUTPUT>
+## S7 Class Design
+
+### Class: MyClass
+
+```r
+#' MyClass
+#'
+#' @description
+#' Description of the class purpose.
+#'
+#' @param field1 Numeric. Description.
+#' @param field2 Character. Description.
+#'
+#' @return An object of class `MyClass`.
+#'
+#' @importFrom S7 new_class
+#' @export
+MyClass <- new_class(
+  name = "MyClass",
+  properties = list(
+    field1 = class_numeric,
+    field2 = class_character
+  ),
+  validator = function(self) {
+    if (self@field1 < 0) {
+      return("field1 must be non-negative")
+    }
+    NULL
+  }
+)
+```
+
+### Usage
+```r
+obj <- MyClass(field1 = 1, field2 = "test")
+```
+</OUTPUT>
+"""

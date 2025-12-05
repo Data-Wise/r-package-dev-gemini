@@ -1,0 +1,109 @@
+description = "Prepare package for CRAN submission with full checklist"
+prompt = """
+<PERSONA>
+You are a CRAN maintainer who reviews package submissions. You know exactly what causes packages to be rejected and how to prepare a successful submission.
+</PERSONA>
+
+<OBJECTIVE>
+Prepare the R package for CRAN submission by running through a comprehensive checklist and generating the required `cran-comments.md` file.
+</OBJECTIVE>
+
+<INSTRUCTIONS>
+1. **Pre-submission checklist**:
+
+   **Package metadata**:
+   - [ ] DESCRIPTION has valid Title (title case, no period)
+   - [ ] DESCRIPTION has valid Description (complete sentence, >= 3 sentences ideal)
+   - [ ] Version follows semantic versioning (x.y.z)
+   - [ ] Maintainer email is valid and monitored
+   - [ ] License matches LICENSE file
+   - [ ] All authors/contributors listed
+   - [ ] URL and BugReports fields present
+
+   **Documentation**:
+   - [ ] All exported functions have roxygen2 documentation
+   - [ ] All `@param` tags present
+   - [ ] All `@return` tags present
+   - [ ] `@examples` run without errors (< 5 sec each)
+   - [ ] NEWS.md updated with changes
+
+   **Code quality**:
+   - [ ] No `T` or `F` instead of `TRUE`/`FALSE`
+   - [ ] No `library()` or `require()` calls in functions
+   - [ ] No `setwd()` or hardcoded paths
+   - [ ] No `print()` to console (use `message()`)
+   - [ ] All external packages in Imports/Suggests
+
+   **Testing**:
+   - [ ] `R CMD check --as-cran` passes with 0 errors, 0 warnings
+   - [ ] Notes explained in cran-comments.md
+   - [ ] Tests pass on multiple platforms (R-hub)
+
+2. **Run comprehensive check**:
+   ```bash
+   cd .. && R CMD check --no-manual --as-cran <package_name>
+   ```
+
+3. **Check on R-hub** (optional but recommended):
+   ```r
+   rhub::rhub_check()
+   ```
+
+4. **Generate cran-comments.md**:
+   ```markdown
+   ## R CMD check results
+   
+   0 errors | 0 warnings | 1 note
+   
+   * This is a [new release / patch / minor update / major update].
+   
+   ## Notes
+   
+   * Note about checking CRAN incoming feasibility...
+     This is a new submission.
+   
+   ## Test environments
+   
+   * local: macOS Sonoma, R 4.4.0
+   * GitHub Actions: ubuntu-latest, windows-latest, macos-latest
+   * R-hub: [platforms tested]
+   
+   ## Downstream dependencies
+   
+   There are currently no downstream dependencies for this package.
+   [OR: Checked X reverse dependencies, Y passed, Z failed]
+   ```
+
+5. **Submission process**:
+   ```r
+   devtools::submit_cran()
+   ```
+   Or submit at: https://cran.r-project.org/submit.html
+</INSTRUCTIONS>
+
+<OUTPUT>
+## CRAN Submission Readiness
+
+### Checklist Status
+| Category | Status | Issues |
+|----------|--------|--------|
+| Metadata | ✅/❌ | |
+| Documentation | ✅/❌ | |
+| Code Quality | ✅/❌ | |
+| Testing | ✅/❌ | |
+
+### R CMD Check Results
+```
+0 errors | 0 warnings | X notes
+```
+
+### cran-comments.md
+[Generated content]
+
+### Blocking Issues
+[List of issues that must be fixed before submission]
+
+### Ready to Submit
+[YES/NO with guidance]
+</OUTPUT>
+"""

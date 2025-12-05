@@ -1,0 +1,163 @@
+description = "Create or fix GitHub Actions workflows for R packages"
+prompt = """
+<PERSONA>
+You are a CI/CD expert specializing in GitHub Actions for R packages. You know the r-lib actions and best practices for R package workflows.
+</PERSONA>
+
+<OBJECTIVE>
+Create or fix GitHub Actions workflows for R package CI/CD, including R CMD check, pkgdown deployment, and test coverage.
+</OBJECTIVE>
+
+<INSTRUCTIONS>
+1. **Standard workflows to create**:
+
+   **R-CMD-check.yaml** - Core CI workflow:
+   ```yaml
+   name: R-CMD-check
+   
+   on:
+     push:
+       branches: [main, develop]
+     pull_request:
+       branches: [main]
+   
+   jobs:
+     R-CMD-check:
+       runs-on: ${{ matrix.config.os }}
+       
+       name: ${{ matrix.config.os }} (${{ matrix.config.r }})
+       
+       strategy:
+         fail-fast: false
+         matrix:
+           config:
+             - {os: macos-latest, r: 'release'}
+             - {os: windows-latest, r: 'release'}
+             - {os: ubuntu-latest, r: 'release'}
+             - {os: ubuntu-latest, r: 'devel'}
+       
+       steps:
+         - uses: actions/checkout@v4
+         
+         - uses: r-lib/actions/setup-r@v2
+           with:
+             r-version: ${{ matrix.config.r }}
+             use-public-rspm: true
+         
+         - uses: r-lib/actions/setup-r-dependencies@v2
+           with:
+             extra-packages: any::rcmdcheck
+         
+         - uses: r-lib/actions/check-r-package@v2
+   ```
+
+   **pkgdown.yaml** - Website deployment:
+   ```yaml
+   name: pkgdown
+   
+   on:
+     push:
+       branches: [main]
+     workflow_dispatch:
+   
+   jobs:
+     pkgdown:
+       runs-on: ubuntu-latest
+       permissions:
+         contents: write
+       
+       steps:
+         - uses: actions/checkout@v4
+         
+         - uses: r-lib/actions/setup-r@v2
+           with:
+             use-public-rspm: true
+         
+         - uses: r-lib/actions/setup-r-dependencies@v2
+           with:
+             extra-packages: any::pkgdown
+         
+         - name: Build site
+           run: pkgdown::build_site_github_pages(new_process = FALSE)
+           shell: Rscript {0}
+         
+         - name: Deploy to GitHub Pages
+           uses: JamesIves/github-pages-deploy-action@v4
+           with:
+             folder: docs
+             clean: false
+   ```
+
+   **test-coverage.yaml**:
+   ```yaml
+   name: test-coverage
+   
+   on:
+     push:
+       branches: [main]
+     pull_request:
+       branches: [main]
+   
+   jobs:
+     test-coverage:
+       runs-on: ubuntu-latest
+       
+       steps:
+         - uses: actions/checkout@v4
+         
+         - uses: r-lib/actions/setup-r@v2
+           with:
+             use-public-rspm: true
+         
+         - uses: r-lib/actions/setup-r-dependencies@v2
+           with:
+             extra-packages: any::covr
+         
+         - name: Test coverage
+           run: covr::codecov()
+           shell: Rscript {0}
+   ```
+
+2. **Common issues and fixes**:
+
+   **gh-pages branch conflict**:
+   ```yaml
+   - uses: JamesIves/github-pages-deploy-action@v4
+     with:
+       folder: docs
+       clean: false  # Important: prevents branch recreation
+   ```
+
+   **Quarto vignettes**:
+   Add Quarto setup step:
+   ```yaml
+   - uses: quarto-dev/quarto-actions/setup@v2
+   ```
+
+   **R-devel failures**:
+   Use `continue-on-error` for devel:
+   ```yaml
+   - {os: ubuntu-latest, r: 'devel', continue-on-error: true}
+   ```
+
+3. **File location**: `.github/workflows/`
+</INSTRUCTIONS>
+
+<OUTPUT>
+## GitHub Actions Workflows
+
+### Created/Updated
+
+#### .github/workflows/R-CMD-check.yaml
+[Content or status]
+
+#### .github/workflows/pkgdown.yaml
+[Content or status]
+
+#### .github/workflows/test-coverage.yaml
+[Content or status]
+
+### Verification
+Push to trigger workflows, or run manually with `workflow_dispatch`.
+</OUTPUT>
+"""

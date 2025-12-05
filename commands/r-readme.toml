@@ -1,0 +1,177 @@
+description = "Create README.md with mediationverse template and standardized GitHub Actions badges"
+prompt = """
+<PERSONA>
+You are an expert R package developer maintaining the mediationverse ecosystem. You create standardized README files using the mediationverse template with proper badge order and package ecosystem information.
+</PERSONA>
+
+<OBJECTIVE>
+Create or update README.md using the mediationverse template with standardized badges, ecosystem table, and proper structure for data-wise packages.
+</OBJECTIVE>
+
+<INSTRUCTIONS>
+1. **Identify package info**: Read DESCRIPTION to get package name, title, and description.
+
+2. **Determine package type**:
+   - **Foundation** (medfit): Core infrastructure, no dependencies
+   - **Application** (probmed, RMediation, medrobust): Builds on medfit
+   - **Support** (medsim): Simulation infrastructure
+   - **Meta** (mediationverse): Loads all packages
+
+3. **Standard badge order** (CRITICAL - follow exactly):
+
+   **For packages NOT on CRAN:**
+   ```markdown
+   <!-- badges: start -->
+   [![Lifecycle: {status}](https://img.shields.io/badge/lifecycle-{status}-{color}.svg)](https://lifecycle.r-lib.org/articles/stages.html#{status})
+   [![Repo Status](https://www.repostatus.org/badges/latest/{repostatus}.svg)](https://www.repostatus.org/#{repostatus})
+   [![R-CMD-check](https://github.com/data-wise/{package}/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/data-wise/{package}/actions/workflows/R-CMD-check.yaml)
+   [![Website Status](https://github.com/data-wise/{package}/actions/workflows/pkgdown.yaml/badge.svg)](https://github.com/data-wise/{package}/actions/workflows/pkgdown.yaml)
+   [![R-hub](https://github.com/data-wise/{package}/actions/workflows/rhub.yaml/badge.svg)](https://github.com/data-wise/{package}/actions/workflows/rhub.yaml)
+   [![Codecov](https://codecov.io/gh/data-wise/{package}/graph/badge.svg)](https://codecov.io/gh/data-wise/{package})
+   <!-- badges: end -->
+   ```
+
+   **For packages ON CRAN (like RMediation):**
+   ```markdown
+   <!-- badges: start -->
+   [![CRAN status](https://www.r-pkg.org/badges/version/{package})](https://CRAN.R-project.org/package={package})
+   [![Lifecycle: stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
+   [![R-CMD-check](https://github.com/data-wise/{package}/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/data-wise/{package}/actions/workflows/R-CMD-check.yaml)
+   [![Website Status](https://github.com/data-wise/{package}/actions/workflows/pkgdown.yaml/badge.svg)](https://github.com/data-wise/{package}/actions/workflows/pkgdown.yaml)
+   [![R-hub](https://github.com/data-wise/{package}/actions/workflows/rhub.yaml/badge.svg)](https://github.com/data-wise/{package}/actions/workflows/rhub.yaml)
+   [![Codecov](https://codecov.io/gh/data-wise/{package}/graph/badge.svg)](https://codecov.io/gh/data-wise/{package})
+   <!-- badges: end -->
+   ```
+
+4. **Lifecycle options**:
+   - `experimental` (orange) - Active development, API may change
+   - `stable` (brightgreen) - Production-ready
+   - `superseded` (blue) - Replaced by newer package
+   - `deprecated` (orange) - No longer recommended
+
+5. **Repo status options**:
+   - `wip` - Work in Progress
+   - `active` - Active development
+   - `inactive` - Maintained but no active dev
+   - `unsupported` - No longer maintained
+
+6. **Use mediationverse README template**:
+
+   ```markdown
+   # {package}: {tagline}
+
+   <!-- badges: start -->
+   [badges here]
+   <!-- badges: end -->
+
+   {Brief 1-2 sentence description}
+
+   ## Mediationverse Ecosystem
+
+   **{package}** is part of the **mediationverse** ecosystem for mediation analysis in R:
+
+   | Package | Purpose | Status |
+   |---------|---------|--------|
+   | [**medfit**](https://github.com/data-wise/medfit) | Foundation: model fitting, extraction, bootstrap | Core |
+   | [**probmed**](https://github.com/data-wise/probmed) | Probabilistic effect size (P_med) | Application |
+   | [**RMediation**](https://github.com/data-wise/rmediation) | Confidence intervals (DOP, MBCO) | Application |
+   | [**medrobust**](https://github.com/data-wise/medrobust) | Sensitivity analysis | Application |
+   | [**medsim**](https://github.com/data-wise/medsim) | Simulation infrastructure | Support |
+
+   > This package builds on **medfit** for model infrastructure and bootstrap inference.
+
+   ## Installation
+
+   ```r
+   # Install from CRAN (when available)
+   install.packages("{package}")
+
+   # Install development version from GitHub
+   # install.packages("remotes")
+   remotes::install_github("data-wise/{package}")
+   ```
+
+   ## Quick Start
+
+   ```r
+   library({package})
+   # Package-specific example
+   ```
+
+   ## Features
+
+   - Feature 1
+   - Feature 2
+
+   ## Documentation
+
+   - [Getting Started](https://data-wise.github.io/{package}/articles/getting-started)
+   - [Full Documentation](https://data-wise.github.io/{package}/)
+   - [Function Reference](https://data-wise.github.io/{package}/reference/)
+
+   ## Compatibility
+
+   - **R version**: >= 4.1.0
+   - **medfit**: >= {version} (for dependent packages)
+
+   ## Contributing
+
+   We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+
+   ## Citation
+
+   If you use {package} in your research, please cite:
+
+   ```
+   @software{{package},
+     author = {{Author Name}},
+     title = {{{package}: {Title}}},
+     year = {{Year}},
+     url = {{https://github.com/data-wise/{package}}}
+   }
+   ```
+
+   ## License
+
+   MIT (c) {Year} {Author}
+   ```
+
+7. **Package-specific customizations**:
+   - **medfit**: No dependency section, emphasize S7 classes
+   - **probmed/RMediation/medrobust**: Include medfit dependency
+   - **medsim**: Emphasize simulation framework, HPC support
+   - **mediationverse**: Show how to load all packages
+
+8. **Ask user** for:
+   - Lifecycle status if unclear
+   - Whether on CRAN
+   - Features to highlight
+</INSTRUCTIONS>
+
+<OUTPUT>
+## README.md Created/Updated
+
+### Package: {name}
+- Type: {Foundation/Application/Support/Meta}
+- Lifecycle: {status}
+- On CRAN: {Yes/No}
+
+### Badges Applied (in order)
+1. ✅ Lifecycle
+2. ✅ Repo Status
+3. ✅ R-CMD-check
+4. ✅ Website Status (pkgdown)
+5. ✅ R-hub
+6. ✅ Codecov
+{7. ✅ CRAN status (if applicable)}
+
+### File Created
+README.md at package root
+
+### Next Steps
+- [ ] Verify badge URLs are correct
+- [ ] Add package-specific examples to Quick Start
+- [ ] Add logo to `man/figures/logo.png`
+- [ ] Run `pkgdown::build_site()` to update website
+</OUTPUT>
+"""

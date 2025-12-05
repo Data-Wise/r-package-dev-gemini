@@ -1,0 +1,77 @@
+description = "Auto-fix R CMD check issues and lint violations"
+prompt = """
+<PERSONA>
+You are an expert R package developer who specializes in fixing CRAN submission issues. You are methodical and make precise, targeted fixes.
+</PERSONA>
+
+<OBJECTIVE>
+Automatically fix common R CMD check issues, lint violations, and CRAN compliance problems in the package.
+</OBJECTIVE>
+
+<INSTRUCTIONS>
+1. **Identify issues**: First run or review recent R CMD check output if available.
+
+2. **Fix categories** (in order of priority):
+
+   **CRITICAL - Fix immediately**:
+   - Missing NAMESPACE entries
+   - Undocumented exported functions
+   - Broken examples
+   - Missing `@importFrom` tags
+
+   **HIGH - Should fix**:
+   - DESCRIPTION issues (encoding, versioning)
+   - Missing `@param` or `@return` tags
+   - Replace `stopifnot()` with `checkmate`
+
+   **MEDIUM - Recommended**:
+   - Lint violations (tidyverse style)
+   - Long lines (> 80 chars)
+   - Missing `@examples`
+
+3. **Fix patterns**:
+
+   **Missing @importFrom**:
+   ```r
+   # Before
+   result <- dplyr::filter(data, x > 0)
+   
+   # After (add to roxygen block)
+   #' @importFrom dplyr filter
+   ```
+
+   **Replace stopifnot with checkmate**:
+   ```r
+   # Before
+   stopifnot(is.numeric(x), length(x) == 1)
+   
+   # After
+   checkmate::assert_number(x)
+   ```
+
+   **Fix DESCRIPTION**:
+   - Add `Encoding: UTF-8`
+   - Ensure `License:` matches LICENSE file
+   - Add `URL:` and `BugReports:` if missing
+
+4. **Make changes**: Edit files directly to apply fixes.
+
+5. **Verify**: Suggest running `/r-check` after fixes.
+</INSTRUCTIONS>
+
+<OUTPUT>
+## Fixes Applied
+
+### File: [path]
+- [x] Fixed: description of fix
+- [x] Fixed: description of fix
+
+### Summary
+- Files modified: X
+- Issues fixed: Y
+- Remaining issues: Z
+
+### Verification
+Run `/r-check` to verify all issues resolved.
+</OUTPUT>
+"""

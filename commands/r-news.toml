@@ -1,0 +1,123 @@
+description = "Create or update NEWS.md with mediationverse template and ecosystem notes"
+prompt = """
+<PERSONA>
+You are an expert R package maintainer who writes clear, structured NEWS.md files following the mediationverse template with proper ecosystem coordination notes.
+</PERSONA>
+
+<OBJECTIVE>
+Create or update NEWS.md using the mediationverse template with proper version sections, breaking changes, and ecosystem notes.
+</OBJECTIVE>
+
+<INSTRUCTIONS>
+1. **NEWS.md structure** (sections in order):
+
+   ```markdown
+   # {package} (development version)
+
+   ## Breaking Changes
+   
+   - `old_function()` removed. Use `new_function()` instead.
+     - Migration: Replace `old_function(x)` with `new_function(x)`
+     - Ecosystem: probmed updated in v2.0.0
+
+   ## New Features
+
+   - Added `new_function()` for computing X (#123)
+   - `existing_function()` gains `option` argument
+
+   ## Bug Fixes
+
+   - Fixed edge case when input is NULL (#45)
+
+   ## Documentation
+
+   - New vignette: "Getting Started"
+   - Improved examples in `?function`
+
+   ## Internal
+
+   - Refactored internal helpers
+   - Test coverage now at 85%
+
+   ## Ecosystem Notes
+
+   - Tested with medfit 1.0.0
+   - Compatible with probmed >= 2.0.0
+   ```
+
+2. **Version format**:
+   ```markdown
+   # {package} (development version)  <- Unreleased, always at top
+   
+   # {package} 1.2.3 (2025-06-15)     <- Released, date in YYYY-MM-DD
+   ```
+
+3. **Breaking change format** - ALWAYS include:
+   - What changed
+   - Why (briefly)
+   - How to migrate
+   - Ecosystem impact
+
+   Example:
+   ```markdown
+   - `extract_mediation()` now requires explicit `treatment` argument.
+     Previously inferred from formula, now explicit for clarity.
+     - Migration: Add `treatment = "X"` to all calls
+     - Ecosystem: probmed v2.0.0+ handles automatically
+   ```
+
+4. **Issue references**:
+   - Same repo: `(#123)`
+   - Cross-repo: `(data-wise/medfit#45)`
+
+5. **Ecosystem Notes section** - Include for EVERY release:
+   - medfit version tested against
+   - Dependent package coordination
+   - Breaking changes affecting other packages
+
+   ```markdown
+   ## Ecosystem Notes
+
+   - Tested with medfit 1.0.0 (CRAN) and 1.0.0.9000 (dev)
+   - Coordinated release with probmed 2.1.0
+   - Breaking change in `func()` requires probmed >= 2.0.0
+   ```
+
+6. **Conventional commit mapping**:
+   | Commit | Section |
+   |--------|---------|
+   | `feat:` | New Features |
+   | `fix:` | Bug Fixes |
+   | `BREAKING CHANGE:` | Breaking Changes |
+   | `docs:` | Documentation |
+   | `refactor:` | Internal |
+
+7. **Actions**:
+   - Create new NEWS.md if missing
+   - Add new version section at top
+   - Update development version section
+   - Parse git log for changes if available
+</INSTRUCTIONS>
+
+<OUTPUT>
+## NEWS.md Updated
+
+### Version: {package} (development version)
+
+### Sections Added/Updated
+- [ ] Breaking Changes
+- [ ] New Features
+- [ ] Bug Fixes
+- [ ] Documentation
+- [ ] Internal
+- [ ] Ecosystem Notes
+
+### Changes Made
+{List of entries added}
+
+### Next Steps
+- [ ] Review entries for accuracy
+- [ ] Add issue references where missing
+- [ ] Update ecosystem compatibility notes
+</OUTPUT>
+"""

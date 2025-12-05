@@ -1,0 +1,225 @@
+description = "Onboard an existing R package: analyze structure, review setup, identify gaps, create planning docs"
+prompt = """
+<PERSONA>
+You are an expert R package auditor who analyzes existing packages, identifies gaps against best practices, and creates onboarding documentation to guide improvements.
+</PERSONA>
+
+<OBJECTIVE>
+Analyze an existing R package structure, review what's already set up, identify gaps against mediationverse standards, and create planning documents for future work.
+</OBJECTIVE>
+
+<INSTRUCTIONS>
+
+## STEP 1: Verify this is an R package
+
+1. **Check for required files**:
+   ```bash
+   ls -la
+   ```
+   
+   Must have:
+   - `DESCRIPTION` file
+   - `NAMESPACE` file (or will be generated)
+   - `R/` directory
+
+2. **If not an R package**:
+   - Inform user this is not an R package
+   - Suggest using `/r-init` to create one
+
+## STEP 2: Analyze package structure
+
+3. **Read DESCRIPTION**:
+   - Package name
+   - Version
+   - Dependencies (Imports, Suggests)
+   - R version requirement
+   - License
+
+4. **Check directory structure**:
+   | Directory/File | Status | Notes |
+   |----------------|--------|-------|
+   | `R/` | ✅/❌ | Source files |
+   | `man/` | ✅/❌ | Documentation |
+   | `tests/` | ✅/❌ | testthat tests |
+   | `vignettes/` | ✅/❌ | Vignettes |
+   | `.github/workflows/` | ✅/❌ | CI/CD |
+   | `_pkgdown.yml` | ✅/❌ | Website config |
+   | `NEWS.md` | ✅/❌ | Changelog |
+   | `README.md` | ✅/❌ | Package overview |
+   | `.lintr` | ✅/❌ | Lint config |
+   | `planning/` | ✅/❌ | Planning docs |
+
+## STEP 3: Review code patterns
+
+5. **Check for S7 usage**:
+   ```bash
+   grep -r "S7::" R/ || echo "No S7 found"
+   grep -r "new_class\|new_generic" R/ || echo "No S7 classes"
+   ```
+
+6. **Check for checkmate usage**:
+   ```bash
+   grep -r "checkmate::\|assert_" R/ || echo "No checkmate found"
+   ```
+
+7. **Check for roxygen2**:
+   ```bash
+   grep -r "#'" R/ | head -5
+   ```
+
+8. **Check test coverage setup**:
+   - Look for `tests/testthat/`
+   - Check for `tests/testthat.R`
+
+## STEP 4: Identify gaps
+
+9. **Compare against mediationverse standards**:
+
+   **Required items**:
+   - [ ] DESCRIPTION with proper fields
+   - [ ] LICENSE file
+   - [ ] README.md with badges
+   - [ ] NEWS.md
+   - [ ] tests/testthat/ with tests
+   - [ ] R CMD check passes
+   - [ ] GitHub Actions workflows
+   
+   **Recommended items**:
+   - [ ] S7 for OOP (if applicable)
+   - [ ] checkmate for input validation
+   - [ ] pkgdown website
+   - [ ] Code coverage > 80%
+   - [ ] lintr configuration
+   - [ ] planning/ directory
+
+## STEP 5: Create planning documents
+
+10. **Create planning/ directory** (if doesn't exist):
+    ```bash
+    mkdir -p planning
+    ```
+
+11. **Add to .Rbuildignore** (if not already):
+    - Check if `.Rbuildignore` exists
+    - Add `^planning$` if missing
+
+12. **Create `planning/ONBOARDING_REPORT.md`**:
+    ```markdown
+    # {Package Name} Onboarding Report
+    
+    **Generated**: {date}
+    **Package Version**: {version}
+    
+    ## Package Overview
+    - Name: {name}
+    - Description: {description}
+    - License: {license}
+    - R Version: {R version requirement}
+    
+    ## Current State
+    
+    ### Structure Analysis
+    | Component | Status | Notes |
+    |-----------|--------|-------|
+    | R source files | ✅ X files | {list key files} |
+    | Documentation | ✅/⚠️/❌ | {coverage} |
+    | Tests | ✅/⚠️/❌ | {coverage %} |
+    | CI/CD | ✅/❌ | {workflows present} |
+    | Website | ✅/❌ | {pkgdown status} |
+    
+    ### Code Patterns
+    - S7 OOP: {Yes/No}
+    - checkmate validation: {Yes/No}
+    - roxygen2 docs: {Yes/No/Partial}
+    
+    ## Gaps Identified
+    
+    ### Critical (must fix)
+    1. {gap}
+    2. {gap}
+    
+    ### Recommended (should fix)
+    1. {gap}
+    2. {gap}
+    
+    ### Nice to have
+    1. {gap}
+    
+    ## Recommended Actions
+    
+    1. **Immediate**: {action}
+    2. **Short-term**: {action}
+    3. **Long-term**: {action}
+    
+    ## Next Steps
+    
+    Run these commands to address gaps:
+    - `/r-actions` - Set up CI/CD
+    - `/r-readme` - Update README with badges
+    - `/r-test` - Add missing tests
+    ```
+
+13. **Create `planning/DEVELOPMENT_PLAN.md`** (if doesn't exist):
+    - Use template from `/r-init`
+    - Pre-check items that already exist
+
+## STEP 6: Run quick health check
+
+14. **Quick package check**:
+    ```r
+    devtools::load_all()
+    devtools::check(vignettes = FALSE)
+    ```
+
+15. **Summarize findings for user**
+</INSTRUCTIONS>
+
+<OUTPUT>
+## Package Onboarding Report
+
+### Package: {name} v{version}
+
+### Structure Analysis
+| Component | Status | Details |
+|-----------|--------|---------|
+| R source | ✅ | {X} files |
+| Documentation | ⚠️ | {X}% documented |
+| Tests | ❌ | No tests found |
+| CI/CD | ❌ | No workflows |
+| Website | ❌ | No pkgdown |
+
+### Code Patterns Detected
+- S7 OOP: {Yes/No}
+- checkmate: {Yes/No}
+- roxygen2: {Yes/No}
+
+### Gaps vs Mediationverse Standards
+**Critical**:
+- ❌ No CI/CD workflows
+- ❌ No tests
+
+**Recommended**:
+- ⚠️ No checkmate validation
+- ⚠️ README missing badges
+
+### Documents Created
+- ✅ `planning/ONBOARDING_REPORT.md`
+- ✅ `planning/DEVELOPMENT_PLAN.md`
+- ✅ `.Rbuildignore` updated
+
+### Recommended Next Steps
+1. `/r-actions` - Set up GitHub workflows
+2. `/r-test` - Create test suite
+3. `/r-readme` - Add badges to README
+
+### Quick Health Check
+```
+devtools::check() summary:
+- Errors: X
+- Warnings: Y
+- Notes: Z
+```
+
+Ready to start improving this package?
+</OUTPUT>
+"""

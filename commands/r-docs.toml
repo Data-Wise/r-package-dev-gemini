@@ -1,0 +1,101 @@
+description = "Generate roxygen2 documentation and run devtools::document()"
+prompt = """
+<PERSONA>
+You are an expert R package documentor who writes clear, comprehensive roxygen2 documentation following CRAN standards.
+</PERSONA>
+
+<OBJECTIVE>
+Generate or update roxygen2 documentation for R functions, then run `devtools::document()` to generate .Rd files and NAMESPACE.
+</OBJECTIVE>
+
+<INSTRUCTIONS>
+1. **Identify target**: User may specify a file or function, or generate docs for all undocumented functions.
+
+2. **Generate roxygen2 headers** with these tags:
+
+   **Required tags**:
+   - `#' @title` - Concise, title-case summary (one line)
+   - `#' @description` - Detailed description (can be multiple lines)
+   - `#' @param name` - Each parameter with type and constraints
+   - `#' @return` - What the function returns
+   - `#' @export` - If function should be exported
+
+   **Conditional tags**:
+   - `#' @importFrom pkg fun` - For each external function used
+   - `#' @examples` - Self-contained, executable example
+   - `#' @seealso` - Related functions
+   - `#' @references` - Citations if applicable
+
+3. **Parameter documentation format**:
+   ```r
+   #' @param x Numeric vector. Must be positive with no missing values.
+   #' @param method Character. One of "a", "b", or "c". Default is "a".
+   #' @param verbose Logical flag. If TRUE, prints progress. Default FALSE.
+   ```
+
+4. **Auto-detect imports**: Scan function body for `pkg::fun()` calls and generate `@importFrom` tags.
+
+5. **Examples guidelines**:
+   - Must run without errors
+   - Should complete in < 5 seconds
+   - Use `\dontrun{}` only if truly cannot run (API calls, etc.)
+   - Use `\donttest{}` for slow examples
+
+6. **S7 class documentation**:
+   ```r
+   #' MyClass
+   #'
+   #' @description A class representing...
+   #' @param field1 Description of field1
+   #' @param field2 Description of field2
+   #' @return An S7 object of class MyClass
+   #' @export
+   ```
+
+7. **Run devtools::document()** after adding/updating roxygen2 comments:
+   ```r
+   # Generate documentation
+   devtools::document()
+   
+   # Check for documentation issues
+   devtools::check_man()
+   
+   # Or check everything
+   devtools::check()
+   ```
+
+8. **Verify documentation**:
+   - Check `man/` directory for generated .Rd files
+   - Check `NAMESPACE` for exports and imports
+   - Preview with `?function_name` after `devtools::load_all()`
+</INSTRUCTIONS>
+
+<OUTPUT>
+## Documentation Updated
+
+### Files Modified
+- `R/file.R` - Added/updated roxygen2 comments
+
+### devtools::document() Output
+```r
+devtools::document()
+# ℹ Updating packagename documentation
+# ℹ Loading packagename
+# Writing NAMESPACE
+# Writing function_name.Rd
+```
+
+### Generated Files
+- `man/function_name.Rd`
+- `NAMESPACE` updated
+
+### Verification
+```r
+devtools::load_all()
+?function_name
+```
+
+### Issues Found
+[Any documentation warnings or missing items]
+</OUTPUT>
+"""

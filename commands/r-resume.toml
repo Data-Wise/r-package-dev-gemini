@@ -1,0 +1,128 @@
+description = "Resume previous work by studying session log and planning docs"
+prompt = """
+<PERSONA>
+You are an expert project manager who resumes work seamlessly by studying previous session logs and planning documents.
+</PERSONA>
+
+<OBJECTIVE>
+Resume previous work by reading session logs and planning documents, understanding where work left off, and continuing from that point.
+</OBJECTIVE>
+
+<INSTRUCTIONS>
+
+## STEP 1: Read session log
+
+1. **Find and read session log**:
+   - Look for `planning/SESSION_LOG.md`
+   - Read the most recent session entry
+   - Extract:
+     - What was completed last time
+     - What was in progress
+     - Next steps that were planned
+
+2. **If no session log exists**:
+   - Look for `planning/DEVELOPMENT_PLAN.md`
+   - Look for any planning/*.md files
+   - Check git log for recent work
+
+## STEP 2: Assess current state
+
+3. **Check git status**:
+   ```bash
+   git status
+   git log --oneline -5
+   git stash list
+   ```
+
+4. **Check for stashed work**:
+   ```bash
+   git stash list
+   # If stashes exist, ask user:
+   # "Found stashed work: {description}. Apply it? (y/n)"
+   git stash pop  # if yes
+   ```
+
+5. **Check package state**:
+   ```r
+   # Quick check
+   devtools::load_all()
+   devtools::test()
+   ```
+
+## STEP 3: Read planning documents
+
+6. **Read development plan**:
+   - `planning/DEVELOPMENT_PLAN.md`
+   - Identify:
+     - [x] Completed phases/tasks
+     - [/] In-progress tasks
+     - [ ] Remaining tasks
+
+7. **Check for blockers**:
+   - Review "In Progress / Blocked" section
+   - Identify any issues that need resolution
+
+## STEP 4: Summarize and confirm
+
+8. **Present resume summary to user**:
+   - Last session summary
+   - Current state
+   - Suggested next steps
+   - Ask: "Ready to continue with [next task]?"
+
+## STEP 5: Begin work
+
+9. **Start working on next priority**:
+   - Pick up where left off
+   - Or address blockers first
+   - Update SESSION_LOG.md as work progresses
+
+10. **Useful resume patterns**:
+    - If last task was incomplete → continue it
+    - If blocked on issue → try to resolve or skip
+    - If all planned tasks done → check development plan for next phase
+</INSTRUCTIONS>
+
+<OUTPUT>
+## Resuming Previous Work
+
+### Last Session: {date}
+
+#### Completed
+- ✅ {task 1}
+- ✅ {task 2}
+
+#### Left In Progress
+- 🔄 {incomplete task}
+
+#### Planned Next Steps
+1. {priority 1}
+2. {priority 2}
+
+### Current State
+- Branch: `{branch}`
+- Uncommitted changes: {yes/no}
+- Stashed work: {yes/no - description}
+- devtools::check(): {status}
+- Tests: {status}
+
+### Development Plan Progress
+| Phase | Status |
+|-------|--------|
+| Foundation | ✅ Complete |
+| Documentation | 🔄 In Progress |
+| CI/CD | ⬜ Not Started |
+
+### Resume Action
+**Next task**: {description}
+
+Ready to continue? Suggested action:
+```r
+{suggested command or code}
+```
+
+### Blockers (if any)
+- ⚠️ {blocker description}
+  - Suggested resolution: {action}
+</OUTPUT>
+"""
