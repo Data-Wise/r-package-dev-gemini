@@ -69,7 +69,7 @@
 - [x] All docs created
 - [x] LICENSE added
 - [x] CHANGELOG added
-- [ ] Git initialized
-- [ ] GitHub repo created
-- [ ] Tagged v1.0.0
-- [ ] README updated with install instructions
+- [x] Git initialized
+- [x] GitHub repo created (`Data-Wise/r-package-dev-gemini`)
+- [x] Tagged v1.0.0
+- [x] README updated with install instructions
