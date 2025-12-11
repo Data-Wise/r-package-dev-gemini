@@ -8,3 +8,8 @@
 
 # Keep workspace file but ignore user settings
 !*.code-workspace
+
+# Node.js / MCP Server
+node_modules/
+dist/
+.venv/

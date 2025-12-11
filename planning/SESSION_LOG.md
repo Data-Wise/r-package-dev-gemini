@@ -1,5 +1,47 @@
 # Session Log
 
+## Session: 2025-12-11 06:40:00
+
+### Work Completed
+- **Architecture Review**: Analyzed the project structure and proposed a "Hybrid MCP Architecture".
+- **MCP Server Implementation**:
+  - Scaffolding: Created `mcp-server/` with Node.js/TypeScript setup.
+  - Core Logic: Implemented `r_check` (R CMD check) and `r_document` tools in `src/index.ts`.
+  - Safety: Implemented robust temp-file execution for R scripts.
+  - Configuration: Registered the new server in `gemini-extension.json`.
+- **Command Refactoring**:
+  - Updated `commands/r-check.toml` to prioritize the new `r_check` tool with a graceful fallback to shell commands.
+- **Planning**:
+  - Updated `planning/DEVELOPMENT_PLAN.md` with the new "Phase 2" roadmap.
+
+### Files Modified
+- `commands/r-check.toml` - Added MCP tool logic.
+- `gemini-extension.json` - Bumped version to 1.1.0, added MCP server.
+- `mcp-server/` - Created entire directory (TypeScript source, config).
+- `planning/DEVELOPMENT_PLAN.md` - Added Phase 2 plan.
+
+### Current State
+- **Branch**: main
+- **MCP Status**: Server code compiled (`tsc`), ready for integration.
+- **Extension Version**: 1.1.0 (local)
+
+### In Progress / Blocked
+- [ ] Restart Gemini CLI to load the new MCP server.
+- [ ] Verify `r_check` tool works in a live session.
+- [ ] Refactor `r-docs.toml` to use the `r_document` tool.
+
+### Next Steps (for resume)
+1.  **Restart CLI**: To load the `r-package-dev` MCP server.
+2.  **Verify MCP**: Run `/mcp` to ensure connection.
+3.  **Test**: Run `/r-check` to verify the new tool-based workflow.
+
+### Notes
+- The Python MCP SDK was incompatible with the system Python 3.9, so we pivoted to a Node.js implementation which works perfectly with the available Node v25.
+
+---
+
+# Session Log
+
 ## Session: 2025-12-10 23:20:53
 
 ### Work Completed

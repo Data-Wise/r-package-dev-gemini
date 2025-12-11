@@ -73,3 +73,18 @@
 - [x] GitHub repo created
 - [x] Tagged v1.0.0
 - [x] README updated with install instructions
+
+## Phase 2: Hybrid MCP Architecture (Current Focus)
+
+Moving from "Shell-based" to "Tool-based" architecture for higher reliability.
+
+### MCP Server Scaffold
+- [x] Initialize `mcp-server/` directory
+- [x] Create Python-based MCP server (`server.py`)
+- [ ] Implement `r_check` tool (wraps `rcmdcheck` or `devtools::check`)
+- [ ] Implement `r_get_description` resource
+
+### Integration
+- [ ] Register `r-package-dev` MCP server in Gemini config
+- [ ] Refactor `commands/r-check.toml` to use the `r_check` tool
+- [ ] Refactor `commands/r-docs.toml` to use `r_document` tool
