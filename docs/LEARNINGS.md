@@ -16,6 +16,14 @@ Knowledge captured from R package development sessions.
   }
   ```
 
+### Gemini Extensions
+
+- **Local Development**: Extensions must be symlinked to `~/.gemini/extensions/` to be loaded.
+  ```bash
+  ln -s /path/to/my-extension ~/.gemini/extensions/my-extension
+  ```
+- **MCP Servers**: Require a restart of the Gemini CLI to load new MCP server configurations.
+
 ### checkmate Validation
 
 - Use `checkmate::assert_*` functions for input validation
