@@ -93,3 +93,14 @@ devtools::check()       # Full check
   #' @importFrom checkmate assert_number assert_string
   NULL
   ```
+
+## MCP Server Issues
+
+### Connection Closed Error
+
+- **Issue**: MCP server starts, but Gemini CLI reports "Connection closed" (Error -32000).
+- **Diagnosis**: The server likely exits prematurely or fails to communicate over `stdin`/`stdout` during the initial JSON-RPC handshake.
+- **Troubleshooting**:
+    - Ensure `dist/index.js` accurately reflects `src/index.ts` (rebuild after changes).
+    - Add extensive logging to `src/index.ts` to pinpoint exact failure points during startup and handshake.
+    - Test server manually with a full JSON-RPC handshake to capture raw error output (e.g., redirect `stderr`).
