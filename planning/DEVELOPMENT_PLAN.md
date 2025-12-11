@@ -80,11 +80,11 @@ Moving from "Shell-based" to "Tool-based" architecture for higher reliability.
 
 ### MCP Server Scaffold
 - [x] Initialize `mcp-server/` directory
-- [x] Create Python-based MCP server (`server.py`)
+- [x] Create Node.js-based MCP server (`index.ts`)
 - [ ] Implement `r_check` tool (wraps `rcmdcheck` or `devtools::check`)
 - [ ] Implement `r_get_description` resource
 
 ### Integration
-- [ ] Register `r-package-dev` MCP server in Gemini config
+- [x] Register `r-package-dev` MCP server in Gemini config
 - [ ] Refactor `commands/r-check.toml` to use the `r_check` tool
 - [ ] Refactor `commands/r-docs.toml` to use `r_document` tool

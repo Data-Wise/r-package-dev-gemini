@@ -1,5 +1,42 @@
 # Session Log
 
+## Session: 2025-12-11 06:58:00
+
+### Work Completed
+- **MCP Server Diagnosis**: Identified that the `r-package-dev` MCP server was not loading because the extension was not linked in `~/.gemini/extensions/`.
+- **MCP Server Fix**: Created a symbolic link `~/.gemini/extensions/r-package-dev -> ...` to register the extension.
+- **MCP Server Verification**:
+  - Rebuilt the server (`npm run build` in `mcp-server/`).
+  - Verified runtime health by executing `mcp-server/dist/index.js` manually.
+  - Confirmed the `build` script was added to `package.json`.
+- **Open-Aware Diagnosis**: Investigated `open-aware` connection issues. Confirmed server reachability (curl works) but identified a likely protocol/session mismatch in the CLI client (HTTP 400).
+
+### Files Modified
+- `planning/DEVELOPMENT_PLAN.md` - Updated Phase 2 status (Node.js switch, registration complete).
+- `mcp-server/package.json` - Added `build` script.
+- `planning/SESSION_LOG.md` - Added session entry.
+
+### Current State
+- **Branch**: main
+- **MCP Status**: `r-package-dev` is linked and ready to load on next restart.
+- **Open-Aware**: Diagnostics complete; requires CLI restart/update.
+
+### In Progress / Blocked
+- [ ] Restart Gemini CLI to load the `r-package-dev` MCP server.
+- [ ] Refactor `commands/r-check.toml` to use the new `r_check` tool (once loaded).
+
+### Next Steps (for resume)
+1.  **Restart CLI**: Critical to load the new extension configuration.
+2.  **Verify MCP**: Run `/mcp` to confirm `r-package-dev` is green.
+3.  **Continue Phase 2**: Implement tool usage in `r-check.toml`.
+
+### Notes
+- The `r-package-dev` extension was technically "configured" but not "installed" (linked). The manual symlink fixed this.
+
+---
+
+# Session Log
+
 ## Session: 2025-12-11 06:40:00
 
 ### Work Completed
@@ -71,3 +108,9 @@
 
 ### Notes
 - The `open-aware` server returns 406 to raw curl requests but is reachable. The 400 error in CLI is likely due to the session needing a refresh.
+---
+## Session: 2025-12-10 10:20:00 (Resumed)
+### Work Completed
+- Resumed session and read previous session log.
+### Current State
+- Ready to proceed with next steps from previous session.
